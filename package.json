@@ -1,6 +1,6 @@
 {
   "name": "UnityDebugGUI",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Common helpers for creating Debug GUI using the old GUI",
   "main": "index.js",
   "files": [
