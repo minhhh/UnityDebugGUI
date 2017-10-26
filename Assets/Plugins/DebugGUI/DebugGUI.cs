@@ -7,6 +7,7 @@ namespace DGUI
     public class DebugGUI : MonoBehaviour
     {
         protected static GUIScaler _guiScaler;
+        protected static Rect _lastRect = Rect.zero;
         static Dictionary <Type, string[]> _enumToStringArray = new Dictionary <Type, string[]> ();
 
         public static GUIScaler GUIScaler {
@@ -90,6 +91,14 @@ namespace DGUI
             }
         }
 
+        public static Rect GetLastRect ()
+        {
+            if (Event.current.type == EventType.Repaint) {
+                _lastRect = GUILayoutUtility.GetLastRect ();
+            }
+            return GUIScaler.ReversedConvert (_lastRect);
+        }
+
         public static void DrawArea (Rect area, Action drawContent)
         {
             area = GUIScaler.Convert (area);
@@ -128,6 +137,14 @@ namespace DGUI
             return scrollPosition;
         }
 
+        public static Vector2 DrawScrollView (Rect screenRect, Vector2 scrollPosition, Action drawContent)
+        {
+            GUILayout.BeginArea (GUIScaler.Convert (screenRect));
+            scrollPosition = DrawScrollView (scrollPosition, drawContent);
+            GUILayout.EndArea ();
+            return scrollPosition;
+        }
+
         public static void DrawCenterTextLine (string text, params GUILayoutOption[] options)
         {
             GUILayout.BeginHorizontal ();
@@ -140,6 +157,7 @@ namespace DGUI
         public static void DrawLeftTextLine (string text, params GUILayoutOption[] options)
         {
             GUILayout.BeginHorizontal ();
+            GUILayout.Space (5);
             GUILayout.Label (text, MiddleLeftLabelStyle, options);
             GUILayout.FlexibleSpace ();
             GUILayout.EndHorizontal ();
@@ -150,6 +168,7 @@ namespace DGUI
             GUILayout.BeginHorizontal ();
             GUILayout.FlexibleSpace ();
             GUILayout.Label (text, MiddleRightLabelStyle, options);
+            GUILayout.Space (5);
             GUILayout.EndHorizontal ();
         }
 
@@ -163,6 +182,7 @@ namespace DGUI
         public static void DrawLeftTitle (string text, params GUILayoutOption[] options)
         {
             GUILayout.BeginHorizontal ();
+            GUILayout.Space (5);
             GUILayout.Label (text, MiddleLeftTitleStyle, options);
             GUILayout.EndHorizontal ();
         }
@@ -171,15 +191,16 @@ namespace DGUI
         {
             GUILayout.BeginHorizontal ();
             GUILayout.Label (text, MiddleRightTitleStyle, options);
+            GUILayout.Space (5);
             GUILayout.EndHorizontal ();
         }
 
-        public static void DrawLabelField (string label, string text)
+        public static void DrawLabelField (string label, string text, GUILayoutOption[] labelOptions = null, GUILayoutOption[] textOptions = null)
         {
             GUILayout.BeginHorizontal ();
             GUILayout.Space (5);
-            GUILayout.Label (label, MiddleLeftLabelStyle);
-            GUILayout.Label (text, MiddleLeftLabelStyle);
+            GUILayout.Label (label, MiddleLeftLabelStyle, labelOptions);
+            GUILayout.Label (text, MiddleLeftLabelStyle, textOptions);
             GUILayout.Space (5);
             GUILayout.EndHorizontal ();
         }
@@ -200,7 +221,7 @@ namespace DGUI
             return text ?? label;
         }
 
-        public static bool DrawEnumButton (Type enumType, ref int index)
+        public static bool DrawEnumButton (Type enumType, ref int index, params GUILayoutOption[] options)
         {
             bool clicked = false;
 
