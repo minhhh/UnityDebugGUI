@@ -7,7 +7,7 @@ namespace DGUI
     public class DebugGUI : MonoBehaviour
     {
         protected static GUIScaler _guiScaler;
-        protected static Rect _lastRect = Rect.zero;
+        protected static Rect _lastRect;
         static Dictionary <Type, string[]> _enumToStringArray = new Dictionary <Type, string[]> ();
 
         public static GUIScaler GUIScaler {

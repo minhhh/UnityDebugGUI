@@ -50,6 +50,10 @@ To include UnityDebugGUI into your project, you can use `npm` method of unity pa
 
 ## Changelog
 
+**0.0.6**
+
+* Support Unity 5.4
+
 **0.0.5**
 
 * Scale font size of labels and add external style
